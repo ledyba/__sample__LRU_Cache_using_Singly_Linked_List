@@ -25,7 +25,8 @@ suite
     console.log(String(event.target));
   })
   .on('complete', (event: Event) => {
-    const fastest = (suite.filter('fastest').map((obj: Target) => obj)[0]) as Target;
-    console.log(`Fastest: ${fastest['name']}`);
+    // FIXME: @types/benchmark looks broken!
+    const fastest = suite.filter('fastest') as any;
+    console.log(`[Done] Fastest: ${fastest[0].name}`);
   })
   .run();
