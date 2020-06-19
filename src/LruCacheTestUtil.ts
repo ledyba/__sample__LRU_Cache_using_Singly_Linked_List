@@ -30,22 +30,27 @@ export default function runTest(createCache: (capacity: number) => LruCache<numb
     const cache = createCache(2);
     expect(cache.getEntry(1)).toBe(false);
     expect(cache.getEntry(1)).toBe(true);
+
     expect(cache.getEntry(2)).toBe(false);
     expect(cache.getEntry(2)).toBe(true);
+
     expect(cache.getEntry(3)).toBe(false);
     expect(cache.getEntry(3)).toBe(true);
     // id=1 is last used!
     expect(cache.has(1)).toBe(false);
     expect(cache.getEntry(1)).toBe(false);
     expect(cache.getEntry(1)).toBe(true);
+
+    // id=2 is last used!
     expect(cache.has(2)).toBe(false);
     expect(cache.getEntry(2)).toBe(false);
     expect(cache.getEntry(2)).toBe(true);
+
     // id=3 is last used!
     expect(cache.getEntry(3)).toBe(false);
     expect(cache.getEntry(3)).toBe(true);
   });
-  
+  /*
   test('fuzzing', () => {
     const cache = createCache(10);
     const recents = new Array(10);
@@ -58,4 +63,5 @@ export default function runTest(createCache: (capacity: number) => LruCache<numb
       expect(cache.has(id)).toBe(recents.indexOf(id) >= 0);
     }
   });
+  */
 }

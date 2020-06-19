@@ -24,49 +24,53 @@ export default class Cache<K> implements LruCache<K> {
 
   public getEntry(id: K): boolean {
     const cache = this.map.get(id);
-    if(!!cache) {
+    if(cache !== undefined) {
       this.pushFirst(cache);
       return true;
+    } else {
+      const entry = new CacheEntry(id);
+      this.map.set(id, entry);
+      this.pushFirst(entry);
+      this.makeRoom();
+      return false;
     }
-    const entry = new CacheEntry(id);
-    this.map.set(id, entry);
-    this.pushFirst(entry);
-    if(this.map.size > this.capacity_ && this.capacity_ > 0) {
-      this.map.delete(this.popLast()!.id);
-    }
-    return false;
   }
 
-  private popLast() : CacheEntry<K> | null {
-    const last = this.last;
-    if(!last) {
-      return null;
+  private makeRoom() {
+    while(this.map.size > this.capacity_ && this.last !== null) {
+      this.map.delete(this.last.id);
+      if(this.last.next) {
+        this.last.next.prev = null;
+        this.last = this.last.next;
+      } else {
+        this.last = null;
+        this.first = null;
+      }
     }
-    const nextLast = last.next;
-    if(nextLast) {
-      nextLast.prev = null;
-      this.last = nextLast;
-    } else {
-      this.last = null;
-    }
-    return last;
   }
 
   private pushFirst(entry: CacheEntry<K>) {
-    if(!!entry.next) {
+    if(entry === this.first) {
+      return;
+    }
+    if(this.first === null || this.last === null) {
+      entry.next = null;
+      entry.prev = null;
+      this.first = entry;
+      this.last = entry;
+      return;
+    }
+    if(entry.next !== null) {
       entry.next.prev = entry.prev;
     }
-    if(!!entry.prev) {
+    if(entry.prev !== null) {
       entry.prev.next = entry.next;
     }
-    entry.next = null;
     entry.prev = this.first;
+    this.first.next = entry;
     this.first = entry;
-    if(!this.last) {
-      this.last = entry;
-    }
-  }
-
+    this.first.next = null;
+}
   get capacity():number {
     return this.capacity_;
   }
