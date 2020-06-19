@@ -1,6 +1,4 @@
 import LruCache from "./LruCache";
-import assert from 'assert'
-import {fail} from 'assert'
 
 class CacheEntry<K> {
   readonly id: K;
@@ -60,24 +58,16 @@ export default class Cache<K> implements LruCache<K> {
       this.last = nextLast;
       return true;
     } else {
-      const entry = prev.next;
-      if(entry === null) {
-        fail("prev.next can not be null. Entry is not the front.");
-      }
-      if(this.first === null || this.last === null) {
-        fail("this.first or this.last cannot be null. Because cache is not empty.");
-      }
+      const entry = prev.next!; // It's safe, because there should be more than one entries.
       if(this.first === entry) {
         // It's already first.
-        assert(this.first.next === null, "first.next should be always null.");
         return true;
       }
-      assert(entry.next, "entry.next should be not null, if it's not the front.");
       const next = entry.next!;
       prev.next = next;
       this.map.set(next.id, prev);
       this.map.set(entry.id, this.first);
-      this.first.next = entry;
+      this.first!.next = entry; // It's safe, because there should be more than one entries.
       this.first = entry;
       this.first.next = null;
       return true;
