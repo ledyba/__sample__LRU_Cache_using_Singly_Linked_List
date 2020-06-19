@@ -46,7 +46,7 @@ export default class Cache<K> implements LruCache<K> {
       }
       return false;
     } else if(prev === null) {
-      if(this.first === this.last && this.first !== null && this.last !== null) {
+      if(this.first === this.last && (this.first !== null || this.last !== null)) {
         // already on the first, because there are just only one entry.
         return true;
       }
