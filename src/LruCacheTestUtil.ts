@@ -98,7 +98,7 @@ export default function runTest(createCache: (capacity: number) => LruCache<numb
       expect(cache.size).toBe(10);
       expect(cache.capacity).toBe(10);
       expect(cache.keys.length).toBe(10);
-      expect(cache.keys.sort()).toStrictEqual(recents.sort());
+      expect(cache.keys).toStrictEqual(recents);
     }
   });
 }
