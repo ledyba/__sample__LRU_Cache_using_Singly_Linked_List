@@ -78,11 +78,11 @@ export default function runTest(createCache: (capacity: number) => LruCache<numb
 
   });
   test('random test', () => {
-    for(let j = 0; j < 100; ++j) {
+    for(let j = 0; j < 10000; ++j) {
       const cache = createCache(10);
       const recents = new Array();
       for(let i = 0; i < 1000; ++i) {
-        const id = (Math.random() * 100) | 0;
+        const id = (Math.random() * 30) | 0;
         const pos = recents.indexOf(id);
         if(pos < 0) {
           recents.push(id);
@@ -97,9 +97,8 @@ export default function runTest(createCache: (capacity: number) => LruCache<numb
       }
       expect(cache.size).toBe(10);
       expect(cache.capacity).toBe(10);
-      recents.sort();
       expect(cache.keys.length).toBe(10);
-      expect(cache.keys.sort()).toStrictEqual(recents);
+      expect(cache.keys.sort()).toStrictEqual(recents.sort());
     }
   });
 }
