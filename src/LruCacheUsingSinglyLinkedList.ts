@@ -30,31 +30,33 @@ export default class Cache<K> implements LruCache<K> {
       }
       this.first = entry;
       this.first.next = null;
-      if(this.last == null) {
+      if(this.last === null) {
         this.last = entry;
       }
-      if(this.map.size > this.capacity_) {
+      while(this.map.size > this.capacity_) {
         // delete the last used entry
         this.map.delete(this.last.id);
         this.last = this.last.next;
-        if(this.last) {
+        if(this.last !== null) {
           this.map.set(this.last.id, null);
         } else {
           this.first = null;
           this.last = null;
+          break;
         }
       }
       return false;
     } else if(prev === null) {
-      if(this.first === this.last && (this.first !== null || this.last !== null)) {
+      if(this.first === this.last) {
         // already on the first, because there are just only one entry.
         return true;
       }
-      const nextLast = this.last!.next!;
+      const nextLast = this.last!.next!; // It's safe, because there more than 1 elements.
       this.map.set(nextLast.id, null);
       this.map.set(this.last!.id, this.first);
       this.first!.next = this.last;
       this.first = this.last;
+      this.first!.next = null;
       this.last = nextLast;
       return true;
     } else {
