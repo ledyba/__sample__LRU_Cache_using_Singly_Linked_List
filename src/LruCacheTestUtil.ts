@@ -53,22 +53,27 @@ export default function runTest(createCache: (capacity: number) => LruCache<numb
     expect(cache.getEntry(3)).toBe(true);
     expect(cache.size).toBe(2);
 
-    // id=1 is last used!
+    // id=1 must be dropped!
     expect(cache.has(1)).toBe(false);
     expect(cache.getEntry(1)).toBe(false);
     expect(cache.getEntry(1)).toBe(true);
     expect(cache.size).toBe(2);
 
-    // id=2 is last used!
+    // id=2 must be dropped!
     expect(cache.has(2)).toBe(false);
     expect(cache.getEntry(2)).toBe(false);
     expect(cache.getEntry(2)).toBe(true);
     expect(cache.size).toBe(2);
 
-    // id=3 is last used!
+    // id=3 must be dropped!
     expect(cache.getEntry(3)).toBe(false);
     expect(cache.getEntry(3)).toBe(true);
     expect(cache.size).toBe(2);
+
+    // id=2 is the last entry, and it's not dropped yet.
+    expect(cache.getEntry(2)).toBe(true);
+    expect(cache.size).toBe(2);
+
   });
   test('fuzzing', () => {
     const cache = createCache(10);
