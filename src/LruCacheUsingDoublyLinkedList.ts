@@ -1,4 +1,5 @@
 import LruCache from "./LruCache";
+import assert from 'assert';
 
 class CacheEntry<K> {
   readonly id: K;
@@ -40,8 +41,8 @@ export default class Cache<K> implements LruCache<K> {
     while(this.map.size > this.capacity_ && this.last !== null) {
       this.map.delete(this.last.id);
       if(this.last.next) {
-        this.last.next.prev = null;
         this.last = this.last.next;
+        this.last.prev = null;
       } else {
         this.last = null;
         this.first = null;
@@ -53,7 +54,20 @@ export default class Cache<K> implements LruCache<K> {
     if(entry === this.first) {
       return;
     }
+    if(entry === this.last) {
+      if(this.last.next !== null){
+        this.last.next.prev = null;
+        this.last = this.last.next;
+      }
+      this.first!.next = entry;
+      entry.prev = this.first;
+      this.first = entry;
+      this.first.next = null;
+      return;
+    }
     if(this.first === null || this.last === null) {
+      assert.equal(this.first, null);
+      assert.equal(this.last, null);
       entry.next = null;
       entry.prev = null;
       this.first = entry;
@@ -75,6 +89,15 @@ export default class Cache<K> implements LruCache<K> {
     return this.capacity_;
   }
   get size():number {
+    let cnt = 0;
+    let it = this.first;
+    let prev = this.first;
+    for(it = this.first; it !== null; it = it.prev) {
+      prev = it;
+      cnt++;
+    }
+    assert.equal(prev, this.last);
+    assert.equal(cnt, this.map.size);
     return this.map.size;
   }
 }
