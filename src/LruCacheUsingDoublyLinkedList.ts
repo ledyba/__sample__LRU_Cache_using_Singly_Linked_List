@@ -1,5 +1,4 @@
 import LruCache from "./LruCache";
-import assert from 'assert';
 
 class CacheEntry<K> {
   readonly id: K;
@@ -51,10 +50,10 @@ export default class Cache<K> implements LruCache<K> {
   }
 
   private pushFirst(entry: CacheEntry<K>) {
-    if(entry === this.first) {
+    if(entry === this.first) { // entry is already the first
       return;
     }
-    if(entry === this.last) {
+    if(entry === this.last) { // entry is the last
       if(this.last.next !== null){
         this.last.next.prev = null;
         this.last = this.last.next;
@@ -65,13 +64,11 @@ export default class Cache<K> implements LruCache<K> {
       this.first.next = null;
       return;
     }
-    if(this.first === null || this.last === null) {
-      assert.equal(this.first, null);
-      assert.equal(this.last, null);
-      entry.next = null;
-      entry.prev = null;
+    if(this.first === null || this.last === null) { // cache is empty.
       this.first = entry;
       this.last = entry;
+      this.first.next = null;
+      this.last.next = null;
       return;
     }
     if(entry.next !== null) {
@@ -89,15 +86,6 @@ export default class Cache<K> implements LruCache<K> {
     return this.capacity_;
   }
   get size():number {
-    let cnt = 0;
-    let it = this.first;
-    let prev = this.first;
-    for(it = this.first; it !== null; it = it.prev) {
-      prev = it;
-      cnt++;
-    }
-    assert.equal(prev, this.last);
-    assert.equal(cnt, this.map.size);
     return this.map.size;
   }
 }
