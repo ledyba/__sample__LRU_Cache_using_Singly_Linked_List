@@ -71,21 +71,35 @@ export default function runTest(createCache: (capacity: number) => LruCache<numb
     expect(cache.size).toBe(2);
 
     // id=2 is the last entry, and it's not dropped yet.
+    expect(cache.has(2)).toBe(true);
     expect(cache.getEntry(2)).toBe(true);
     expect(cache.size).toBe(2);
+    expect(cache.has(2)).toBe(true);
 
   });
-  test('fuzzing', () => {
-    const cache = createCache(10);
-    const recents = new Array(10);
-    for(let i = 0; i < 10000; ++i) {
-      const id = (Math.random() * 1000) | 0;
-      recents[i % 10] = id;
-      cache.getEntry(id);
-    }
-    expect(cache.size).toBe(10);
-    for(let id = 0; id < 1000; ++id) {
-      expect(cache.has(id)).toBe(recents.indexOf(id) >= 0);
+  test('random test', () => {
+    for(let j = 0; j < 100; ++j) {
+      const cache = createCache(10);
+      const recents = new Array();
+      for(let i = 0; i < 1000; ++i) {
+        const id = (Math.random() * 100) | 0;
+        const pos = recents.indexOf(id);
+        if(pos < 0) {
+          recents.push(id);
+          while(recents.length > cache.capacity) {
+            recents.shift();
+          }
+        } else {
+          recents.splice(pos, 1);
+          recents.push(id);
+        }
+        cache.getEntry(id);
+      }
+      expect(cache.size).toBe(10);
+      expect(cache.capacity).toBe(10);
+      recents.sort();
+      expect(cache.keys.length).toBe(10);
+      expect(cache.keys.sort()).toStrictEqual(recents);
     }
   });
 }
