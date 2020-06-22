@@ -3,4 +3,5 @@ export default interface LruCache<K> {
   getEntry(id: K): boolean;
   capacity: number;
   size: number;
+  keys: K[];
 }

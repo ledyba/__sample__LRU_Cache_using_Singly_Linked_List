@@ -80,4 +80,11 @@ export default class Cache<K> implements LruCache<K> {
   get size():number {
     return this.map.size;
   }
+  get keys(): K[] {
+    const keys: K[] = [];
+    for(let it = this.last; it !== null; it = it.next) {
+      keys.push(it.id);
+    }
+    return keys;
+  }
 }
