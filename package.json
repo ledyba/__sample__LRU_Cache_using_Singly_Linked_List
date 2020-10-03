@@ -13,13 +13,13 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@types/benchmark": "^1.0.33",
-    "@types/jest": "^26.0.0",
+    "@types/jest": "^26.0.14",
     "benchmark": "^2.1.4",
-    "jest": "^26.0.1",
-    "npm-check-updates": "^7.0.1",
-    "ts-jest": "^26.1.0",
-    "ts-node": "^8.10.2",
-    "typescript": "^3.9.5"
+    "jest": "^26.4.2",
+    "npm-check-updates": "^9.0.3",
+    "ts-jest": "^26.4.1",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.3"
   },
   "dependencies": {}
 }
