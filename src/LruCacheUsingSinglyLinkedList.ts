@@ -9,7 +9,7 @@ class CacheEntry<K> {
 }
 
 export default class Cache<K> implements LruCache<K> {
-  private capacity_:number = 0;
+  private readonly capacity_:number = 0;
   private readonly map:Map<K, CacheEntry<K> | null> = new Map();
   private first: CacheEntry<K> | null = null;
   private last: CacheEntry<K> | null = null;
