@@ -3,17 +3,17 @@ import { Suite, Event, Target } from 'benchmark'
 import LruCacheUsingSinglyLinkedList from './LruCacheUsingSinglyLinkedList'
 import LruCacheUsingDoublyLinkedList from './LruCacheUsingDoublyLinkedList'
 
+let doublyLinkedList = new LruCacheUsingDoublyLinkedList(1000);
 function double() {
-  let c = new LruCacheUsingDoublyLinkedList(1000);
   for(let i = 0; i < 100000; ++i) {
-    c.getEntry((Math.random() * 1000) | 0);
+    doublyLinkedList.getEntry((Math.random() * 1000) | 0);
   }
 }
 
+const singlyLinkedList = new LruCacheUsingSinglyLinkedList(1000);
 function single() {
-  let c = new LruCacheUsingSinglyLinkedList(1000);
   for(let i = 0; i < 100000; ++i) {
-    c.getEntry((Math.random() * 1000) | 0);
+    singlyLinkedList.getEntry((Math.random() * 1000) | 0);
   }
 }
 
