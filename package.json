@@ -10,7 +10,7 @@
     "bench": "ts-node src/Benchmark.ts"
   },
   "author": "Kaede Fujisaki",
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "@types/benchmark": "^2.1.0",
     "@types/jest": "^26.0.20",
